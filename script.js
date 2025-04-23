@@ -1,5 +1,13 @@
-const weekDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const subjects = ['Accounting', 'Finance', 'Management', 'Statistics', 'English', 'Bangla'];
+
+// Get today
+const todayIndex = new Date().getDay();
+const todayName = weekDays[todayIndex];
+
+// Show today's date
+document.getElementById('current-date').textContent =
+  `Today's Date: ${new Date().toLocaleDateString('en-GB')} (${todayName})`;
 
 // Load name
 const nameInput = document.getElementById('name-input');
@@ -20,11 +28,7 @@ saveBtn.addEventListener('click', () => {
   }
 });
 
-// Show today's date ✅
-document.getElementById('current-date').textContent =
-  `Today's Date: ${new Date().toLocaleDateString('en-GB')}`;
-
-// Render subjects ✅
+// Render subjects for the week
 const weekContainer = document.getElementById('week-container');
 weekDays.forEach(day => {
   const card = document.createElement('div');
@@ -38,6 +42,7 @@ weekDays.forEach(day => {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.id = `${day}-${subject}`;
+    checkbox.disabled = day !== todayName;
     checkbox.checked = getStatus(day, subject);
 
     checkbox.addEventListener('change', () => {
@@ -56,7 +61,7 @@ weekDays.forEach(day => {
   weekContainer.appendChild(card);
 });
 
-// Save/load checkbox ✅
+// Save/load checkbox
 function saveStatus(day, subject, checked) {
   const key = `study-${day}-${subject}`;
   localStorage.setItem(key, checked);
@@ -67,7 +72,7 @@ function getStatus(day, subject) {
   return localStorage.getItem(key) === 'true';
 }
 
-// Reset button ✅
+// Reset week
 document.getElementById('reset-week').addEventListener('click', () => {
   if (confirm("Reset all subjects for the week?")) {
     weekDays.forEach(day => {
@@ -81,7 +86,7 @@ document.getElementById('reset-week').addEventListener('click', () => {
   }
 });
 
-// Theme toggle ✅
+// Theme toggle
 const themeBtn = document.getElementById('toggle-theme');
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'dark') document.body.classList.add('dark');
