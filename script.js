@@ -20,11 +20,11 @@ saveBtn.addEventListener('click', () => {
   }
 });
 
-// Show today's date
+// Show today's date ✅
 document.getElementById('current-date').textContent =
-  `Today's Date: ${new Date().toLocaleDateString()}`;
+  `Today's Date: ${new Date().toLocaleDateString('en-GB')}`;
 
-// Render week
+// Render subjects ✅
 const weekContainer = document.getElementById('week-container');
 weekDays.forEach(day => {
   const card = document.createElement('div');
@@ -56,7 +56,7 @@ weekDays.forEach(day => {
   weekContainer.appendChild(card);
 });
 
-// Save/load checkbox
+// Save/load checkbox ✅
 function saveStatus(day, subject, checked) {
   const key = `study-${day}-${subject}`;
   localStorage.setItem(key, checked);
@@ -67,7 +67,7 @@ function getStatus(day, subject) {
   return localStorage.getItem(key) === 'true';
 }
 
-// Reset week
+// Reset button ✅
 document.getElementById('reset-week').addEventListener('click', () => {
   if (confirm("Reset all subjects for the week?")) {
     weekDays.forEach(day => {
@@ -81,10 +81,10 @@ document.getElementById('reset-week').addEventListener('click', () => {
   }
 });
 
-// Theme toggle
+// Theme toggle ✅
 const themeBtn = document.getElementById('toggle-theme');
-const isDark = localStorage.getItem('theme') === 'dark';
-if (isDark) document.body.classList.add('dark');
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') document.body.classList.add('dark');
 
 themeBtn.addEventListener('click', () => {
   document.body.classList.toggle('dark');
