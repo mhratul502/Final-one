@@ -20,33 +20,33 @@ saveBtn.addEventListener('click', () => {
   }
 });
 
-// Render week and subjects
-const weekContainer = document.getElementById('week-container');
+// Show today's date
+document.getElementById('current-date').textContent =
+  `Today's Date: ${new Date().toLocaleDateString()}`;
 
+// Render week
+const weekContainer = document.getElementById('week-container');
 weekDays.forEach(day => {
   const card = document.createElement('div');
   card.className = 'day-card';
+  card.innerHTML = `<h3>${day}</h3>`;
 
-  const title = document.createElement('h3');
-  title.textContent = day;
-  card.appendChild(title);
-
-  subjects.forEach(sub => {
+  subjects.forEach(subject => {
     const subjectDiv = document.createElement('div');
     subjectDiv.className = 'subject';
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.id = `${day}-${sub}`;
-    checkbox.checked = getStatus(day, sub);
+    checkbox.id = `${day}-${subject}`;
+    checkbox.checked = getStatus(day, subject);
 
     checkbox.addEventListener('change', () => {
-      saveStatus(day, sub, checkbox.checked);
+      saveStatus(day, subject, checkbox.checked);
     });
 
     const label = document.createElement('label');
     label.htmlFor = checkbox.id;
-    label.textContent = sub;
+    label.textContent = subject;
 
     subjectDiv.appendChild(checkbox);
     subjectDiv.appendChild(label);
@@ -56,7 +56,7 @@ weekDays.forEach(day => {
   weekContainer.appendChild(card);
 });
 
-// Save/load checkbox state
+// Save/load checkbox
 function saveStatus(day, subject, checked) {
   const key = `study-${day}-${subject}`;
   localStorage.setItem(key, checked);
@@ -66,3 +66,28 @@ function getStatus(day, subject) {
   const key = `study-${day}-${subject}`;
   return localStorage.getItem(key) === 'true';
 }
+
+// Reset week
+document.getElementById('reset-week').addEventListener('click', () => {
+  if (confirm("Reset all subjects for the week?")) {
+    weekDays.forEach(day => {
+      subjects.forEach(subject => {
+        const key = `study-${day}-${subject}`;
+        localStorage.removeItem(key);
+        const checkbox = document.getElementById(`${day}-${subject}`);
+        if (checkbox) checkbox.checked = false;
+      });
+    });
+  }
+});
+
+// Theme toggle
+const themeBtn = document.getElementById('toggle-theme');
+const isDark = localStorage.getItem('theme') === 'dark';
+if (isDark) document.body.classList.add('dark');
+
+themeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+  localStorage.setItem('theme', theme);
+});
